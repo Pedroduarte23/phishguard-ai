@@ -1,14 +1,14 @@
 import streamlit as st
 import requests
 
+API_URL = "https://phishguard-api-xk0e.onrender.com"
+
 st.title("🔐 PhishGuard AI")
 
 menu = ["Login", "Register"]
 choice = st.sidebar.selectbox("Menu", menu)
 
-# -------------------
-# REGISTER
-# -------------------
+
 if choice == "Register":
     st.subheader("Criar conta")
 
@@ -17,15 +17,13 @@ if choice == "Register":
 
     if st.button("Cadastrar"):
         r = requests.post(
-            "http://127.0.0.1:5000/register",
+            f"{API_URL}/register",
             json={"username": user, "password": senha}
         )
 
         st.write(r.json())
 
-# -------------------
-# LOGIN
-# -------------------
+
 elif choice == "Login":
     st.subheader("Login")
 
@@ -34,7 +32,7 @@ elif choice == "Login":
 
     if st.button("Entrar"):
         r = requests.post(
-            "http://127.0.0.1:5000/login",
+            f"{API_URL}/login",
             json={"username": user, "password": senha}
         )
 
@@ -46,9 +44,7 @@ elif choice == "Login":
         else:
             st.error("Erro no login")
 
-# -------------------
-# SISTEMA PROTEGIDO
-# -------------------
+
 if "logado" in st.session_state and st.session_state.logado:
     st.subheader("Analisar URL")
 
@@ -60,7 +56,7 @@ if "logado" in st.session_state and st.session_state.logado:
         }
 
         r = requests.post(
-            "http://127.0.0.1:5000/analisar",
+            f"{API_URL}/analisar",
             json={"url": url},
             headers=headers
         )
