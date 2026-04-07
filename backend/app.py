@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from core.modelo import prever
 from backend.database import conectar, criar_tabelas
 
@@ -9,11 +10,15 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 
+import os
+
 app = Flask(__name__)
 
 
-app.config["JWT_SECRET_KEY"] = "phishguard-secret"
+CORS(app)
 
+# JWT config
+app.config["JWT_SECRET_KEY"] = "phishguard-secret"
 jwt = JWTManager(app)
 
 criar_tabelas()
@@ -74,7 +79,5 @@ def analisar():
 
 
 if __name__ == "__main__":
-    import os
-
-port = int(os.environ.get("PORT", 10000))
-app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
